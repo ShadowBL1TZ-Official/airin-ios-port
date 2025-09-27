@@ -5,44 +5,27 @@ const withPWA = require("@ducanh2912/next-pwa").default({
   reloadOnOnline: true,
   swcMinify: true,
   disable: process.env.NODE_ENV === "development",
-  // disable:false,
   workboxOptions: {
     disableDevLogs: true,
   },
-  // ... other options you like
+  buildExcludes: [/middleware-manifest.json$/], // ✅ helps static export
 });
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: "export",
-    images: {
-        domains: ['s4.anilist.co','artworks.thetvdb.com','media.kitsu.io', 'image.tmdb.org'],
-        unoptimized: true
-      },
-    //   async headers() {
-    //     return [
-    //         {
-    //             source: "/api/:path*",
-    //             headers: [
-    //                 { key: "Access-Control-Allow-Credentials", value: "true" },
-    //                 { key: "Access-Control-Allow-Origin", value: "*" }, // replace this your actual origin
-    //                 { key: "Access-Control-Allow-Methods", value: "GET,DELETE,PATCH,POST,PUT" },
-    //                 { key: "Access-Control-Allow-Headers", value: "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version" },
-    //             ]
-    //         }
-    //     ]
-    // },
-    typescript: {
-      // !! WARN !!
-      // Dangerously allow production builds to successfully complete even if
-      // your project has type errors.
-      // !! WARN !!
-      ignoreBuildErrors: true,
-    },
-  }
-   
+  output: "export", // ✅ static export enabled
+  images: {
+    domains: [
+      "s4.anilist.co",
+      "artworks.thetvdb.com",
+      "media.kitsu.io",
+      "image.tmdb.org",
+    ],
+    unoptimized: true, // ✅ required for export if using next/image
+  },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+};
+
 module.exports = withPWA(nextConfig);
-// const withBundleAnalyzer = require('@next/bundle-analyzer')({
-//   enabled: process.env.ANALYZE === 'true',
-// })
-// module.exports = withBundleAnalyzer(nextConfig)
